@@ -1,0 +1,9 @@
+django==2.1.10
+djangorestframework==3.9.4
+psycopg2-binary==2.8.3
+django-cors-headers==3.0.2
+django-oauth2-provider==0.2.6.1
+twilio==6.29.2
+isort==4.3.21
+
+

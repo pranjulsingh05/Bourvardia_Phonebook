@@ -1,14 +1,14 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from .serializers import *
-from Phonebook_backend.helper_function import session_manage, getclient
 from django.core.cache import cache
+from rest_framework import generics, status
+from rest_framework.response import Response
+
+from Phonebook_backend.helper_function import getclient, session_manage
 from Phonebook_backend.logging import view_logger
-# from itertools import chain
+
+from .serializers import *
 
 
-class Manager_Search(generics.ListAPIView):  # API to show details of searched user.
+class ManagerSearch(generics.ListAPIView):  # API to show details of searched user.
     """
         The Users_Search object contains the details of the searched user such as name, email, client_id.
 
@@ -91,7 +91,7 @@ class Search(generics.ListAPIView):
         return Response(serializer, status=status.HTTP_200_OK)
 
 
-class Searched_Users_View(generics.ListAPIView):  # API to show details of logged in user.
+class SearchedUsersView(generics.ListAPIView):  # API to show details of logged in user.
     """
         The User_View object contains all the details of the users such as name, client_id, email, contact, emp_id, designation, skill, slack_id, location, language, image_url, projects, hobbies, manager_id, bio.
         ............................................
@@ -128,7 +128,7 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
 
     def designation(self):
 
-        designation = Employee_Designation.objects.all()
+        designation = EmployeeDesignation.objects.all()
         client_id = self.request.query_params.get('client_id', None)
         if client_id is not None and client_id != 'null':
             des = designation.filter(client_id=client_id)
@@ -138,7 +138,7 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
 
     def location(self):
 
-        location = Employee_Location.objects.all()
+        location = EmployeeLocation.objects.all()
         client_id = self.request.query_params.get('client_id', None)
         if client_id is not None and client_id != 'null':
             loc = location.filter(client_id=client_id)
@@ -148,7 +148,7 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
 
     def skill(self):
 
-        skills = Employee_Skill.objects.all()
+        skills = EmployeeSkill.objects.all()
         client_id = self.request.query_params.get('client_id', None)
         if client_id is not None and client_id != 'null':
             skill = skills.filter(client_id=client_id)
@@ -158,7 +158,7 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
 
     def project(self):
 
-        projects = Employee_Project.objects.all()
+        projects = EmployeeProject.objects.all()
         client_id = self.request.query_params.get('client_id', None)
         if client_id is not None and client_id != 'null':
             project = projects.filter(client_id=client_id)
@@ -168,7 +168,7 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
 
     def language(self):
 
-        languages = Employee_Language.objects.all()
+        languages = EmployeeLanguage.objects.all()
         client_id = self.request.query_params.get('client_id', None)
         if client_id is not None and client_id != 'null':
             language = languages.filter(client_id=client_id)
@@ -191,7 +191,8 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
         """
 
         token = self.request.META.get('HTTP_AUTHORIZATION')
-        Email = cache.get(token)
+        print(token)
+        email = cache.get(token)
 
         if session_manage(self=token):
             basic_details = self.basic_detail()
@@ -201,11 +202,11 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
             project = self.project()
             language = self.language()
 
-            query = Employee.objects.filter(email=Email)
+            query = Employee.objects.filter(email=email)
             userclientid = EmpClientIDSerializers(query, many=True).data[0]['client_id']
-            query1 = Employee_Project.objects.filter(client_id=userclientid)
+            query1 = EmployeeProject.objects.filter(client_id=userclientid)
             searchclientid = getclient(self=self)
-            query2 = Employee_Project.objects.filter(client_id=searchclientid)
+            query2 = EmployeeProject.objects.filter(client_id=searchclientid)
             userproject = ProSerializer(query1, many=True).data
             searchproject = ProSerializer(query2, many=True).data
             print(userproject)
@@ -236,10 +237,10 @@ class Searched_Users_View(generics.ListAPIView):  # API to show details of logge
         else:
             view_logger.error('Session Error in Searched User View.')
             content = {'Error': 'Session Ended!'}
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class View_Hierarchy(generics.ListAPIView):  # API to show hierarchy of logged in and searched user.
+class ViewHierarchy(generics.ListAPIView):  # API to show hierarchy of logged in and searched user.
     """
         The View_Hierarchy object contains the hierarchy details of the searched as well as logged in user such as manager details and interns details.
 
@@ -372,7 +373,7 @@ class View_Hierarchy(generics.ListAPIView):  # API to show hierarchy of logged i
         #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
-class User_Hierarchy(generics.ListAPIView):
+class UserHierarchy(generics.ListAPIView):
 
     model = Employee, Hierarchy
     serializer_class = HierarchySerializers
@@ -420,23 +421,6 @@ class User_Hierarchy(generics.ListAPIView):
             return user
         else:
             return None
-
-    '''def get_intern(self):
-
-        client_id = getclient(self=self)
-        if client_id != 'null':
-            query = Hierarchy.objects.filter(manager_id=client_id)
-            dict2 = EmpClientIDSerializers(query, many=True).data
-
-            if dict2:
-                internid = dict2[0]['client_id']
-                intern = Employee.objects.filter(client_id=internid)
-                for i in range(len(dict2)):
-                    intern_id = dict2[i]['client_id']
-                    interns = intern | Employee.objects.filter(client_id=intern_id)
-                return interns
-            else:
-                return None'''
 
     def get_junior(self):
 
@@ -489,57 +473,55 @@ class User_Hierarchy(generics.ListAPIView):
         manager_set = self.get_manager()
         user_set = self.get_queryset()
         intern_set = self.get_junior()
-        User = SearchSerializer(user_set, many=True).data
+        user = SearchSerializer(user_set, many=True).data
 
         if intern_set is not None:
-            User[0].update({'children': intern_set})
+            user[0].update({'children': intern_set})
 
             if senior_set and manager_set:
-                Senior = SearchSerializer(senior_set, many=True).data
-                Manager = SearchSerializer(manager_set, many=True).data
+                senior = SearchSerializer(senior_set, many=True).data
+                manager = SearchSerializer(manager_set, many=True).data
 
-                if Senior and Manager:
+                if senior and manager:
 
-                    Manager[0].update({'children': User})
-                    Senior[0].update({'children': Manager})
-                    return Response(Senior, status=status.HTTP_200_OK)
+                    manager[0].update({'children': user})
+                    senior[0].update({'children': manager})
+                    return Response(senior, status=status.HTTP_200_OK)
 
             elif manager_set:
-                Manager = SearchSerializer(manager_set, many=True).data
-                Manager[0].update({'children': User})
-                return Response(Manager, status=status.HTTP_200_OK)
+                manager = SearchSerializer(manager_set, many=True).data
+                manager[0].update({'children': user})
+                return Response(manager, status=status.HTTP_200_OK)
 
             elif not senior_set and not manager_set:
-                return Response(User, status=status.HTTP_200_OK)
+                return Response(user, status=status.HTTP_200_OK)
 
             else:
-                Manager = SearchSerializer(manager_set, many=True).data
-                Manager[0].update({'children': User})
-                return Response(Manager, status=status.HTTP_200_OK)
+                manager = SearchSerializer(manager_set, many=True).data
+                manager[0].update({'children': user})
+                return Response(manager, status=status.HTTP_200_OK)
 
         if senior_set and manager_set:
-            Senior = SearchSerializer(senior_set, many=True).data
-            Manager = SearchSerializer(manager_set, many=True).data
+            senior = SearchSerializer(senior_set, many=True).data
+            manager = SearchSerializer(manager_set, many=True).data
 
-            if Senior and Manager:
+            if senior and manager:
 
-                Manager[0].update({'children': User})
-                Senior[0].update({'children': Manager})
-                return Response(Senior, status=status.HTTP_200_OK)
+                manager[0].update({'children': user})
+                senior[0].update({'children': manager})
+                return Response(senior, status=status.HTTP_200_OK)
 
-            elif Manager:
-                Manager[0].update({'children': User})
-                return Response(Manager, status=status.HTTP_200_OK)
+            elif manager:
+                manager[0].update({'children': user})
+                return Response(manager, status=status.HTTP_200_OK)
 
-            elif not Senior and not Manager:
-                return Response(User, status=status.HTTP_200_OK)
+            elif not senior and not manager:
+                return Response(user, status=status.HTTP_200_OK)
 
         elif manager_set:
-            Manager = SearchSerializer(manager_set, many=True).data
-            Manager[0].update({'children': User})
-            return Response(Manager, status=status.HTTP_200_OK)
+            manager = SearchSerializer(manager_set, many=True).data
+            manager[0].update({'children': user})
+            return Response(manager, status=status.HTTP_200_OK)
 
         else:
-            return Response(User, status=status.HTTP_200_OK)
-
-# 108779712461172295230
+            return Response(user, status=status.HTTP_200_OK)

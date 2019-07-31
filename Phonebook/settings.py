@@ -25,7 +25,8 @@ SECRET_KEY = '!=8o$p4d#jxx1o=i+jcga^f&nps0*ao!lv8zxc=4h9(svn$h(='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['31e0749e.ngrok.io', 'localhost:8000', '127.0.0.1']
+
+ALLOWED_HOSTS = ['5ae9c1af.ngrok.io', 'localhost:8000', '127.0.0.1']
 
 
 # Application definition
@@ -55,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -176,6 +177,7 @@ EMAIL_HOST_PASSWORD = 'jvtbkzwftkxmpkzy'
 EMAIL_SUBJECT_PREFIX = '| PHONEBOOK WEB APP |'
 
 
+
 CORS_ORIGIN_ALLOW_ALL = False
 
 
@@ -214,4 +216,5 @@ CORS_ALLOW_HEADERS = (
     'access-token',
     'contact',
     'authentication',
+    'otpsend',
 )

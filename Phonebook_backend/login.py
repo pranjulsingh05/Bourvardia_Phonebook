@@ -1,14 +1,19 @@
+from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import DeleteView
+from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.decorators import api_view
-from .serializers import *
-from django.core.cache import cache
-from Phonebook_backend.helper_function import start_session, authentication
+
+from Phonebook_backend.helper_function import authentication, start_session
 from Phonebook_backend.logging import login_logger
 
+from .serializers import *
 
-class Users_Login(APIView):  # API to fetch data of logging/logged in user to store in database.
+
+class UsersLogin(APIView):  # API to fetch data of logging/logged in user to store in database.
     """
         The users_Login object contains the basic details of the logging in user such as name, client_id, employee id, email, image.
 
@@ -37,9 +42,9 @@ class Users_Login(APIView):  # API to fetch data of logging/logged in user to st
             A status code as response upon logging in of the user.
         """
 
-        token_id = request.META.get('HTTP_AUTHORIZATION')
-        token = request.META.get('HTTP_ACCESS_TOKEN')
-        serializer = UserSerializers(data=request.data)  # Retrieving data according to UserSerializers class.
+        token_id = request.META.get('HTTP_ACCESS_TOKEN')
+        token = request.META.get('HTTP_AUTHORIZATION')
+        serializer = UserSerializers(data=request.data)# Retrieving data according to UserSerializers class.
         client_id = serializer.initial_data['client_id']
         email = serializer.initial_data['email']
 
@@ -48,8 +53,8 @@ class Users_Login(APIView):  # API to fetch data of logging/logged in user to st
                 info = authentication(token_id=token_id)
                 if client_id == info['id'] and email == info['email']:
                     serializer.save()
-                    arr = [Designation_Client, Location_Client, Language_Client,
-                           Skill_Client, Project_Client, Hierarchy_Client]
+                    arr = [DesignationClient, LocationClient, LanguageClient,
+                           SkillClient, ProjectClient, HierarchyClient]
                     for i in arr:
                         serializers = i(data=request.data)
                         if serializers.is_valid():
@@ -83,27 +88,51 @@ class Users_Login(APIView):  # API to fetch data of logging/logged in user to st
                 return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['POST'])
-def User_Logout(request):
-    """
-        This function is used delete data in the cache memory of the user to end the session.
+# @api_view(['POST'])
+# def userlogout(request):
+#     """
+#         This function is used delete data in the cache memory of the user to end the session.
+#
+#         ........................................
+#
+#         Parameter :
+#         request : This is the request method which is used to perform function upon the cache memory for the particular user.
+#         :return:
+#             A status code as response upon logging out of the user.
+#         """
+#
+#     token = request.META.get('HTTP_ACCESS_TOKEN')
+#     email = cache.get(token)
+#     if request.method == 'POST':
+#         cache.delete(token)
+#         login_logger.info('Successful Logout by %s.', email)
+#         content = {'success': 'Successfully Logged Out.'}
+#         return Response(content, status=status.HTTP_200_OK)
+#     else:
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        ........................................
 
-        Parameter :
-        request : This is the request method which is used to perform function upon the cache memory for the particular user.
-        :return:
-            A status code as response upon logging out of the user.
-        """
+class Logout(APIView):
 
-    token = request.META.get('HTTP_ACCESS_TOKEN')
-    email = cache.get(token)
-    if request.method == 'POST':
-        cache.delete(token)
-        login_logger.info('Successful Logout by %s.', email)
-        content = {'success': 'Successfully Logged Out.'}
-        return Response(content, status=status.HTTP_200_OK)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request):
 
+            """
+                This function is used delete data in the cache memory of the user to end the session.
 
+                ........................................
+
+                Parameter :
+                request : This is the request method which is used to perform function upon the cache memory for the particular user.
+                :return:
+                    A status code as response upon logging out of the user.
+                """
+
+            token = request.META.get('HTTP_ACCESS_TOKEN')
+            email = cache.get(token)
+            if request.method == 'POST':
+                cache.delete(token)
+                login_logger.info('Successful Logout by %s.', email)
+                content = {'success': 'Successfully Logged Out.'}
+                return Response(content, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)

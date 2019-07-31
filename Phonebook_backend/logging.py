@@ -1,6 +1,5 @@
 import logging
 
-
 """ Logging in login.py """
 login_logger = logging.getLogger('Phonebook Login')
 login_logger.setLevel(logging.INFO)
@@ -56,4 +55,3 @@ psh.setFormatter(Profileformatter)
 
 profile_logger.addHandler(ph)
 profile_logger.addHandler(psh)
-

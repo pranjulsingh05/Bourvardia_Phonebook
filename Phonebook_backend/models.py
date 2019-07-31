@@ -28,7 +28,7 @@ class Designation(models.Model):
         return self.designation
 
 
-class Employee_Designation(models.Model):
+class EmployeeDesignation(models.Model):
 
     client_id = models.CharField(primary_key=True, max_length=100, default=None)
     designation = models.CharField(max_length=50, blank=True)
@@ -46,7 +46,7 @@ class Location(models.Model):
         return self.location
 
 
-class Employee_Location(models.Model):
+class EmployeeLocation(models.Model):
 
     client_id = models.CharField(primary_key=True, max_length=100, default=None)
     location = models.CharField(max_length=100, blank=True)
@@ -64,7 +64,7 @@ class Skill(models.Model):
         return self.skill
 
 
-class Employee_Skill(models.Model):
+class EmployeeSkill(models.Model):
 
     client_id = models.CharField(primary_key=True, max_length=100, default=None)
     skill = models.CharField(max_length=200, blank=True)
@@ -82,13 +82,13 @@ class Project(models.Model):
         return self.project
 
 
-class Employee_Project(models.Model):
+class EmployeeProject(models.Model):
 
     client_id = models.CharField(primary_key=True, max_length=100, default=None)
     current_project = models.CharField(max_length=50, blank=True)
     previous_project = models.CharField(max_length=300, blank=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     date = models.DateTimeField(auto_now=True)
 
     def function(self):
@@ -104,7 +104,7 @@ class Language(models.Model):
         return self.language
 
 
-class Employee_Language(models.Model):
+class EmployeeLanguage(models.Model):
 
     client_id = models.CharField(primary_key=True, max_length=100, default=None)
     language = models.CharField(max_length=200, blank=True)
@@ -120,4 +120,3 @@ class Hierarchy(models.Model):
 
     def function(self):
         return self.manager_id
-

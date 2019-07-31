@@ -1,16 +1,17 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from rest_framework.decorators import api_view
-from .serializers import *
-from django.db import IntegrityError
-from Phonebook_backend.helper_function import session_manage, getclient
-from Phonebook_backend.models import *
-from Phonebook_backend.logging import profile_logger
 from django.core.mail import mail_admins
+from django.db import IntegrityError
+from rest_framework import generics, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from Phonebook_backend.helper_function import getclient, session_manage
+from Phonebook_backend.logging import profile_logger
+from Phonebook_backend.models import *
+
+from .serializers import *
 
 
-class Home_View(generics.ListAPIView):  # API to show basic details of logged in user.
+class HomeView(generics.ListAPIView):  # API to show basic details of logged in user.
     """
         The Home_View object contains the basic details of the logged in user such as name, employee id, email, bio, image.
 
@@ -60,7 +61,7 @@ class Home_View(generics.ListAPIView):  # API to show basic details of logged in
             :return:
             A queryset of the user with the requested client_id.
         """
-        designation = Employee_Designation.objects.all()
+        designation = EmployeeDesignation.objects.all()
         client_id = getclient(self=self)
         if client_id != 'null':
             des = designation.filter(client_id=client_id)
@@ -134,7 +135,7 @@ class Home_View(generics.ListAPIView):  # API to show basic details of logged in
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Users_View(generics.ListAPIView):  # API to show details of logged in user.
+class UsersView(generics.ListAPIView):  # API to show details of logged in user.
     """
         The User_View object contains all the details of the users such as name, client_id, email, contact, emp_id, designation, skill, slack_id, location, language, image_url, projects, hobbies, manager_id, bio.
         ............................................
@@ -171,8 +172,8 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
     def designation(self):
 
-        designation = Employee_Designation.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        designation = EmployeeDesignation.objects.all()
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             des = designation.filter(client_id=client_id)
             return des
@@ -181,8 +182,8 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
     def location(self):
 
-        location = Employee_Location.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        location = EmployeeLocation.objects.all()
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             loc = location.filter(client_id=client_id)
             return loc
@@ -191,8 +192,8 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
     def skill(self):
 
-        skills = Employee_Skill.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        skills = EmployeeSkill.objects.all()
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             skill = skills.filter(client_id=client_id)
             return skill
@@ -201,8 +202,8 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
     def project(self):
 
-        projects = Employee_Project.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        projects = EmployeeProject.objects.all()
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             project = projects.filter(client_id=client_id)
             return project
@@ -211,8 +212,8 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
     def language(self):
 
-        languages = Employee_Language.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        languages = EmployeeLanguage.objects.all()
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             language = languages.filter(client_id=client_id)
             return language
@@ -266,7 +267,7 @@ class Users_View(generics.ListAPIView):  # API to show details of logged in user
 
 
 @api_view(['PUT'])
-def add_manager(request, pk):
+def addmanager(request, pk):
     """
         This function is used get all the data of the users from the database.
 
@@ -305,7 +306,7 @@ def add_manager(request, pk):
 
 
 @api_view(['GET', 'PUT'])
-def users_updateview(request, pk):  # API to retrieve and update details of logged in user.
+def usersupdateview(request, pk):  # API to retrieve and update details of logged in user.
     """
         This function is used get all the data of the users from the database.
 
@@ -322,11 +323,11 @@ def users_updateview(request, pk):  # API to retrieve and update details of logg
     # if session_manage(self=token):
     try:
         client_id = Employee.objects.get(pk=pk)
-        desid = Employee_Designation.objects.get(pk=pk)
-        locid = Employee_Location.objects.get(pk=pk)
-        skillid = Employee_Skill.objects.get(pk=pk)
-        proid = Employee_Project.objects.get(pk=pk)
-        langid = Employee_Language.objects.get(pk=pk)
+        desid = EmployeeDesignation.objects.get(pk=pk)
+        locid = EmployeeLocation.objects.get(pk=pk)
+        skillid = EmployeeSkill.objects.get(pk=pk)
+        proid = EmployeeProject.objects.get(pk=pk)
+        langid = EmployeeLanguage.objects.get(pk=pk)
         git_id = Employee.objects.get(pk=pk)
         link_id = Employee.objects.get(pk=pk)
     except ValueError:
@@ -381,14 +382,12 @@ def users_updateview(request, pk):  # API to retrieve and update details of logg
                     content = {'error': 'Check The CONTACT Input Field.'}
                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-
                 if locserializer.is_valid():
                     locserializer.save()
                 else:
                     profile_logger.error('UpdateLocSerializer Error.')
                     content = {'error': 'Check The Location Input Field.'}
                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
 
                 if desserializer.is_valid():
                     desserializer.save()
@@ -397,14 +396,12 @@ def users_updateview(request, pk):  # API to retrieve and update details of logg
                     content = {'error': 'Check the Designation Inpur Field'}
                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-
                 if gitserializer.is_valid():
                     gitserializer.save()
                 else:
                     profile_logger.error('GitSerializer Error')
                     content = {'error': 'Check the GitSerializer Inpur Field'}
                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
 
                 if linkserializer.is_valid():
                     linkserializer.save()
@@ -424,12 +421,6 @@ def users_updateview(request, pk):  # API to retrieve and update details of logg
                 except ValueError:
                     content = {'error': 'Check The Skill Input Field.'}
                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-                # if skillserializer.is_valid():
-                #     skillserializer.save()
-                # else:
-                #     profile_logger.error('UpdateSkillSerializer Error.')
-                #     content = {'error': 'Check The Skill Input Field.'}
-                #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
                 if projectserializer.is_valid():
                     projectserializer.save()
@@ -469,7 +460,7 @@ def users_updateview(request, pk):  # API to retrieve and update details of logg
 
 
 @api_view(['GET'])
-def skill_response(request):
+def skillresponse(request):
     """
 
     :param request:
@@ -486,7 +477,7 @@ def skill_response(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def designation_response(request):
+def designationresponse(request):
     """
 
     :param request:
@@ -501,126 +492,3 @@ def designation_response(request):
     else:
         profile_logger.error('Update Desigantion Error.')
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-# @api_view(['GET'])
-# def Skill_u(request):
-#
-#     if request.method == "GET":
-#         queryset = Skill.object.all()
-#         skills
-
-
-
-
-# @api_view(['GET', 'PUT'])
-# def hr_updateview(request, pk):  # API to retrieve and update details of logged in user.
-#     """
-#         This function is used get all the data of the users from the database.
-#
-#         ........................................
-#
-#         Parameter :
-#         request : This is the request method which is used to perform function upon the database for the particular user.
-#         pk : This is the primary key which is used to identify the particular user upon which the functions will be appiled.
-#         :return:
-#             A status code response upon editing or updating the data of the user with the requested primary key.
-#         """
-#
-#     token = request.META.get('HTTP_AUTHORIZATION')
-#     if session_manage(self=token):
-#     # check for hr role
-#         try:
-#
-#             client_id = Employee.objects.get(pk=pk)  # Accessing client_id as primary key to retrieve and update details of logged in user.
-#             desid = Employee_Designation.objects.get(pk=pk)
-#             locid = Employee_Location.objects.get(pk=pk)
-#             skillid = Employee_Skill.objects.get(pk=pk)
-#             proid = Employee_Project.objects.get(pk=pk)
-#             langid = Employee_Language.objects.get(pk=pk)
-#             hid = Hierarchy.objects.get(pk=pk)
-#
-#         except:
-#             profile_logger.error('Primary Key Error in HR Update View.')
-#             return Response(status=status.HTTP_404_NOT_FOUND)
-#
-#         # query = Employee.objects.filter(client_id=client_id).filter(role='hr')
-#         # if query is not None and query != 'null':
-#
-#         if client_id != 'null':
-#             if request.method == 'GET':
-#                 empserializer = EmpSerializers(client_id, context={'request': request})
-#                 desserializer = UpDateDesSerializer(desid, context={'request': request})
-#                 locserializer = UpDateLocSerializer(locid, context={'request': request})
-#                 skillserializer = UpDateSkillSerializer(skillid, context={'request': request})
-#                 projectserializer = UpDateProSerializer(proid, context={'request': request})
-#                 langserializer = UpDateLangSerializer(langid, context={'request': request})
-#                 hierarchyserializer = HierarchySerializers(hid, context={'request': request})
-#
-#                 if desserializer:
-#                     return Response(
-#                         {
-#                             "Basic":empserializer.data,
-#                             "Designation":desserializer.data,
-#                             "Location":locserializer.data,
-#                             "Skill":skillserializer.data,
-#                             "Project":projectserializer.data,
-#                             "Language":langserializer.data,
-#                             "Manager-ID":hierarchyserializer.data
-#                         }
-#                     )
-#                 else:
-#                     profile_logger.error('HR Update View Error.')
-#                     return Response(status=status.HTTP_400_BAD_REQUEST)
-#
-#             elif request.method == 'PUT':
-#                 empserializer = EmpIDSerializers(client_id, data=request.data, context={'request': request})
-#                 desserializer = UpDateDesSerializer(desid, data=request.data, context={'request': request})
-#                 hierarchyserializer = HierarchySerializers(hid, data=request.data, context={'request': request})
-#
-#                 try:
-#                     if empserializer.is_valid():
-#                         empserializer.save()
-#
-#                     else:
-#                         profile_logger.error('EmpIDSerializer Error.')
-#                         content = {'error': 'Check The CONTACT Input Field.'}
-#                         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-#
-#                     if desserializer.is_valid():
-#                         desserializer.save()
-#
-#                     else:
-#                         profile_logger.error('UpdateDesSerializer Error.')
-#                         content = {'error': 'Check The Designation Input Field.'}
-#                         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-#
-#                     if hierarchyserializer.is_valid():
-#                         hierarchyserializer.save()
-#                         content = {'error': 'Data Updated'}
-#                         return Response(content, status=status.HTTP_200_OK)
-#
-#                     else:
-#                         profile_logger.error('HierarchySerializer Error.')
-#                         content = {'error': 'Check The Hierarchy Input Field.'}
-#                         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-#                 except IntegrityError:
-#                     profile_logger.error('Employee Integrity Error.')
-#                     content = {'error': 'Check The EMP-ID Input Field.'}
-#                     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-#
-#         else:
-#             profile_logger.error('No ID in HR Update View Error.')
-#             return status == status.HTTP_400_BAD_REQUEST
-#
-#     elif request.method == 'PUT':
-#         profile_logger.error('Session Error in Update View.')
-#         content = {'error': 'Session Ended!'}
-#         return Response(content, status=status.HTTP_400_BAD_REQUEST)
-#
-#     elif request.method == 'GET':
-#         profile_logger.error('Session Error in Update View.')
-#         content = {'error': 'Session Ended!'}
-#         return Response(content, status=status.HTTP_400_BAD_REQUEST)

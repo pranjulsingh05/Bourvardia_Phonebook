@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import *
 
 
@@ -61,42 +62,42 @@ class EmpIDSerializers(serializers.ModelSerializer):  # Serializer for user_upda
         fields = ('emp_id', )
 
 
-class Designation_Client(serializers.ModelSerializer):
+class DesignationClient(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Designation
+        model = EmployeeDesignation
         fields = ('client_id', )
 
 
-class Location_Client(serializers.ModelSerializer):
+class LocationClient(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Location
+        model = EmployeeLocation
         fields = ('client_id', )
 
 
-class Language_Client(serializers.ModelSerializer):
+class LanguageClient(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Language
+        model = EmployeeLanguage
         fields = ('client_id', )
 
 
-class Skill_Client(serializers.ModelSerializer):
+class SkillClient(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Skill
+        model = EmployeeSkill
         fields = ('client_id', )
 
 
-class Project_Client(serializers.ModelSerializer):
+class ProjectClient(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Project
+        model = EmployeeProject
         fields = ('client_id', )
 
 
-class Hierarchy_Client(serializers.ModelSerializer):
+class HierarchyClient(serializers.ModelSerializer):
 
     class Meta:
         model = Hierarchy
@@ -107,7 +108,7 @@ class EmpDesSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Employee_Designation
+        model = EmployeeDesignation
         fields = ('designation', )
 
 
@@ -121,35 +122,35 @@ class UpDateDesSerializer(serializers.ModelSerializer):
 class EmpLocSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Location
+        model = EmployeeLocation
         fields = ('location', )
 
 
 class EmpSkillSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Skill
+        model = EmployeeSkill
         fields = ('skill', )
 
 
 class EmpProSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Project
+        model = EmployeeProject
         fields = ('current_project', 'previous_project', )
 
 
 class ProSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Project
+        model = EmployeeProject
         fields = ('current_project', )
 
 
 class EmpLangSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Employee_Language
+        model = EmployeeLanguage
         fields = ('language', )
 
 

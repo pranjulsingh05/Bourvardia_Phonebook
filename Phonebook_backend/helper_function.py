@@ -1,15 +1,18 @@
-from .serializers import *
-from django.core.cache import cache
-from google.oauth2 import id_token
-from google.auth.transport import requests
 import os
+
+from django.core.cache import cache
+
+from google.auth.transport import requests
+from google.oauth2 import id_token
+
+from .serializers import *
 
 
 def authentication(token_id):
 
-    App_Id = os.environ.get('APP_ID', '')
+    app_id = os.environ.get('APP_ID', '')
     # Specify the App_Id(CLIENT_ID) of the app that accesses the backend:
-    idinfo = id_token.verify_oauth2_token(token_id, requests.Request(), App_Id)
+    idinfo = id_token.verify_oauth2_token(token_id, requests.Request(), app_id)
 
     if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
         raise ValueError('Wrong issuer.')
@@ -17,8 +20,6 @@ def authentication(token_id):
     if idinfo['hd'] != 'nineleaps.com':
         raise ValueError('Wrong hosted Domain.')
 
-    # ID token is valid. Get the user's Google Account ID from the decoded token using - idinfo['sub']
-    # ID token is valid. Get the user's Google Email ID from the decoded token using - idinfo['email']
     info = {"id":idinfo['sub'], "email" : idinfo['email']}
     return info
 
