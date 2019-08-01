@@ -1,7 +1,4 @@
 from django.core.cache import cache
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import DeleteView
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -48,7 +45,7 @@ class UsersLogin(APIView):  # API to fetch data of logging/logged in user to sto
         client_id = serializer.initial_data['client_id']
         email = serializer.initial_data['email']
 
-        if serializer.is_valid() and request.method == 'POST':
+        if serializer.is_valid():  # and request.method == 'POST':
             try:
                 info = authentication(token_id=token_id)
                 if client_id == info['id'] and email == info['email']:
@@ -114,7 +111,7 @@ class UsersLogin(APIView):  # API to fetch data of logging/logged in user to sto
 
 class Logout(APIView):
 
-    def delete(self, request):
+    def post(self, request):
 
             """
                 This function is used delete data in the cache memory of the user to end the session.
@@ -123,16 +120,17 @@ class Logout(APIView):
 
                 Parameter :
                 request : This is the request method which is used to perform function upon the cache memory for the particular user.
-                :return:
-                    A status code as response upon logging out of the user.
-                """
+                :return: A status code as response upon logging out of the user.
+
+            """
 
             token = request.META.get('HTTP_ACCESS_TOKEN')
             email = cache.get(token)
             if request.method == 'POST':
-                cache.delete(token)
-                login_logger.info('Successful Logout by %s.', email)
-                content = {'success': 'Successfully Logged Out.'}
-                return Response(content, status=status.HTTP_200_OK)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    cache.delete(token)
+                    login_logger.info('Successful Logout by %s.', email)
+                    content = {'success': 'Successfully Logged Out.'}
+                    return Response(content, status=status.HTTP_200_OK)
+                except ValueError:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)

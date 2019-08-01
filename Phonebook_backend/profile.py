@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from Phonebook_backend.helper_function import getclient, session_manage
 from Phonebook_backend.logging import profile_logger
@@ -39,8 +40,8 @@ class HomeView(generics.ListAPIView):  # API to show basic details of logged in 
 
             Parameter :
             self (varchar) : This is the client_id which is used to filter the database for the particular user.
-            :return:
-            A queryset of the user with the requested client_id.
+            :return: A queryset of the user with the requested client_id.
+
         """
         queryset = Employee.objects.all()
         client_id = getclient(self=self)
@@ -88,7 +89,6 @@ class HomeView(generics.ListAPIView):  # API to show basic details of logged in 
             manager_id = HierarchySerializers(queryset, many=True).data
 
             if manager_id:
-
                 query = manager_detail.filter(client_id=manager_id[0]['manager_id'])
                 return query
         elif client_id == 'null':
@@ -121,13 +121,13 @@ class HomeView(generics.ListAPIView):  # API to show basic details of logged in 
                 serializer2 = EmpDesSerializer(designation, many=True).data
                 serializer3 = SearchSerializer(manager, many=True).data
                 return Response({'User': serializer,
-                                'Designation': serializer2,
+                                 'Designation': serializer2,
                                  'Manager': serializer3
-                                 })
+                                 }, status=status.HTTP_200_OK)
             elif not view:
                 profile_logger.error('Home Page Error')
                 content = {'Error': 'No User Found!'}
-                return Response(content, status=status.HTTP_200_OK)
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
 
         else:
             profile_logger.error('Session Error in Home View.')
@@ -221,6 +221,7 @@ class UsersView(generics.ListAPIView):  # API to show details of logged in user.
             return None
 
     def list(self, *args):
+
         """
             This function is used send the data of the particular users from the database.
 
@@ -235,74 +236,113 @@ class UsersView(generics.ListAPIView):  # API to show details of logged in user.
         """
         '''Parameter: client_id=112497232779980669055'''
 
-        # token = self.request.META.get('HTTP_AUTHORIZATION')
-        # if session_manage(self=token):
-        basic_details = self.basic_detail()
-        designation = self.designation()
-        location = self.location()
-        skill = self.skill()
-        project = self.project()
-        language = self.language()
-        base = EmpSerializers(basic_details, many=True)
-        des = EmpDesSerializer(designation, many=True)
-        loc = EmpLocSerializer(location, many=True)
-        sk = EmpSkillSerializer(skill, many=True)
-        pro = EmpProSerializer(project, many=True)
-        lang = EmpLangSerializer(language, many=True)
+        token = self.request.META.get('HTTP_AUTHORIZATION')
+        if session_manage(self=token):
+            basic_details = self.basic_detail()
+            designation = self.designation()
+            location = self.location()
+            skill = self.skill()
+            project = self.project()
+            language = self.language()
+            basic_detail_set = EmpSerializers(basic_details, many=True)
+            designation_set = EmpDesSerializer(designation, many=True)
+            location_set = EmpLocSerializer(location, many=True)
+            skill_set = EmpSkillSerializer(skill, many=True)
+            project_set = EmpProSerializer(project, many=True)
+            language_set = EmpLangSerializer(language, many=True)
 
-        return Response(
-            {
-                "Basic": base.data,
-                "Designation":des.data,
-                "Location":loc.data,
-                "Skill":sk.data,
-                "Project":pro.data,
-                "Language":lang.data
-            }
-        )
-        # else:
-        #     profile_logger.error('Session Error in user view.')
-        #     content = {'Error': 'Session Ended!'}
-        #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['PUT'])
-def addmanager(request, pk):
-    """
-        This function is used get all the data of the users from the database.
-
-        ........................................
-
-        Parameter :
-        request : This is the request method which is used to perform function upon the database for the particular user.
-        pk : This is the primary key which is used to identify the particular user upon which the functions will be appiled.
-        :return:
-            A status code response upon editing or updating the data of the user with the requested primary key.
-        """
-
-    try:
-        client_id = Hierarchy.objects.get(pk=pk)
-        print(client_id)
-    except:
-        profile_logger.error('Primary Key Error in Add Manager View.')
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    if client_id != 'null':
-        if request.method == 'PUT':
-            hierarchyserializer = HierarchySerializers(client_id, data=request.data, context={'request': request})
-            if hierarchyserializer.is_valid():
-                hierarchyserializer.save()
-                content = {'Manager Added Successfully.'}
-                return Response(content, status=status.HTTP_200_OK)
-            else:
-                profile_logger.error('HierarchySerializer Error.')
-                content = {'error': 'Check The Manager Input Field.'}
-                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "Basic": basic_detail_set.data,
+                    "Designation": designation_set.data,
+                    "Location": location_set.data,
+                    "Skill": skill_set.data,
+                    "Project": project_set.data,
+                    "Language": language_set.data
+                }, status=status.HTTP_200_OK
+            )
         else:
-            profile_logger.error('Only PUT method is allowed.')
+            profile_logger.error('Session Error in User View.')
+            content = {'Error': 'Session Ended!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['PUT'])
+# def addmanager(request, pk):
+#     """
+#         This function is used get all the data of the users from the database.
+#
+#         ........................................
+#
+#         Parameter :
+#         request : This is the request method which is used to perform function upon the database for the particular user.
+#         pk : This is the primary key which is used to identify the particular user upon which the functions will be appiled.
+#         :return:
+#             A status code response upon editing or updating the data of the user with the requested primary key.
+#         """
+#
+#     try:
+#         client_id = Hierarchy.objects.get(pk=pk)
+#         print(client_id)
+#     except:
+#         profile_logger.error('Primary Key Error in Add Manager View.')
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+#     if client_id != 'null':
+#         if request.method == 'PUT':
+#             hierarchyserializer = HierarchySerializers(client_id, data=request.data, context={'request': request})
+#             if hierarchyserializer.is_valid():
+#                 hierarchyserializer.save()
+#                 content = {'Manager Added Successfully.'}
+#                 return Response(content, status=status.HTTP_200_OK)
+#             else:
+#                 profile_logger.error('HierarchySerializer Error.')
+#                 content = {'error': 'Check The Manager Input Field.'}
+#                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             profile_logger.error('Only PUT method is allowed.')
+#             return status == status.HTTP_400_BAD_REQUEST
+#     else:
+#         profile_logger.error('No ID in Add Manager.')
+#         return status == status.HTTP_400_BAD_REQUEST
+
+
+class AddManager(APIView):
+
+    def put(self, request, pk):
+        """
+            This function is used get all the data of the users from the database.
+
+            ........................................
+
+            Parameter :
+            request : This is the request method which is used to perform function upon the database for the particular user.
+            pk : This is the primary key which is used to identify the particular user upon which the functions will be appiled.
+            :return:
+                A status code response upon editing or updating the data of the user with the requested primary key.
+            """
+
+        try:
+            client_id = Hierarchy.objects.get(pk=pk)
+        except ValueError:
+            profile_logger.error('Primary Key Error in Add Manager View.')
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if client_id != 'null':
+            if request.method == 'PUT':
+                hierarchyserializer = HierarchySerializers(client_id, data=request.data, context={'request': request})
+                if hierarchyserializer.is_valid():
+                    hierarchyserializer.save()
+                    content = {'Manager Added Successfully.'}
+                    return Response(content, status=status.HTTP_200_OK)
+                else:
+                    profile_logger.error('HierarchySerializer Error.')
+                    content = {'error': 'Check The Manager Input Field.'}
+                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                profile_logger.error('Only PUT method is allowed.')
+                return status == status.HTTP_400_BAD_REQUEST
+        else:
+            profile_logger.error('No ID in Add Manager.')
             return status == status.HTTP_400_BAD_REQUEST
-    else:
-        profile_logger.error('No ID in Add Manager.')
-        return status == status.HTTP_400_BAD_REQUEST
 
 
 @api_view(['GET', 'PUT'])
@@ -318,177 +358,367 @@ def usersupdateview(request, pk):  # API to retrieve and update details of logge
         :return:
             A status code response upon editing or updating the data of the user with the requested primary key.
         """
+    token = request.META.get('HTTP_AUTHORIZATION')
+    if session_manage(self=token):
+        try:
+            client_id = Employee.objects.get(pk=pk)
+            desid = EmployeeDesignation.objects.get(pk=pk)
+            locid = EmployeeLocation.objects.get(pk=pk)
+            skillid = EmployeeSkill.objects.get(pk=pk)
+            proid = EmployeeProject.objects.get(pk=pk)
+            langid = EmployeeLanguage.objects.get(pk=pk)
+            git_id = Employee.objects.get(pk=pk)
+            link_id = Employee.objects.get(pk=pk)
+        except ValueError:
+            profile_logger.error('Primary Key Error in Update View.')
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # token = request.META.get('HTTP_AUTHORIZATION')
-    # if session_manage(self=token):
-    try:
-        client_id = Employee.objects.get(pk=pk)
-        desid = EmployeeDesignation.objects.get(pk=pk)
-        locid = EmployeeLocation.objects.get(pk=pk)
-        skillid = EmployeeSkill.objects.get(pk=pk)
-        proid = EmployeeProject.objects.get(pk=pk)
-        langid = EmployeeLanguage.objects.get(pk=pk)
-        git_id = Employee.objects.get(pk=pk)
-        link_id = Employee.objects.get(pk=pk)
-    except ValueError:
-        profile_logger.error('Primary Key Error in Update View.')
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        if client_id != 'null':
+            if request.method == 'GET':
 
-    if client_id != 'null':
-        print(request.data)
-        if request.method == 'GET':
+                empserializer = EmpSerializers(client_id, context={'request': request})
+                desserializer = EmpDesSerializer(desid, context={'request': request})
+                locserializer = EmpLocSerializer(locid, context={'request': request})
+                skillserializer = EmpSkillSerializer(skillid, context={'request': request})
+                projectserializer = EmpProSerializer(proid, context={'request': request})
+                langserializer = EmpLangSerializer(langid, context={'request': request})
+                gitserializer = HomeSerializers(git_id, context={'request': request})
+                linkserializer = HomeSerializers(link_id, context={'request': request})
 
-            empserializer = EmpSerializers(client_id, context={'request': request})
-            desserializer = EmpDesSerializer(desid, context={'request': request})
-            locserializer = EmpLocSerializer(locid, context={'request': request})
-            skillserializer = EmpSkillSerializer(skillid, context={'request': request})
-            projectserializer = EmpProSerializer(proid, context={'request': request})
-            langserializer = EmpLangSerializer(langid, context={'request': request})
-            gitserializer = HomeSerializers(git_id, context = {'request' : request})
-            linkserializer = HomeSerializers(link_id, context = {'request' : request})
+                if empserializer:
+                    return Response(
+                        {
+                            "Basic": empserializer.data,
+                            "Designation": desserializer.data,
+                            "Location": locserializer.data,
+                            "Skill": skillserializer.data,
+                            "Project": projectserializer.data,
+                            "Language": langserializer.data,
+                            "Git_id": gitserializer.data,
+                            "Link_id": linkserializer.data,
+                        }, status=status.HTTP_200_OK
+                    )
+                else:
+                    profile_logger.error('Update View Error.')
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            if empserializer:
-                return Response(
-                    {
-                        "Basic": empserializer.data,
-                        "Designation": desserializer.data,
-                        "Location": locserializer.data,
-                        "Skill": skillserializer.data,
-                        "Project": projectserializer.data,
-                        "Language": langserializer.data,
-                        "Git_id": gitserializer.data,
-                        "Link_id": linkserializer.data,
-                    }
-                )
+            elif request.method == 'PUT':
+
+                empserializer = EmpUpdateSerializers(client_id, data=request.data, context={'request': request})
+                locserializer = EmpLocSerializer(locid, data=request.data, context={'request': request})
+                projectserializer = EmpProSerializer(proid, data=request.data, context={'request': request})
+                langserializer = EmpLangSerializer(langid, data=request.data, context={'request': request})
+                desserializer = EmpDesSerializer(desid, data=request.data, context={'request': request})
+                gitserializer = HomeSerializers(git_id, data=request.data, context={'request': request})
+                linkserializer = HomeSerializers(link_id, data=request.data, context={'request': request})
+                try:
+
+                    if empserializer.is_valid():
+                        empserializer.save()
+                    else:
+                        profile_logger.error('EmpUpdateSerializer Error.')
+                        content = {'error': 'Check The CONTACT Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if locserializer.is_valid():
+                        locserializer.save()
+                    else:
+                        profile_logger.error('UpdateLocSerializer Error.')
+                        content = {'error': 'Check The Location Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if desserializer.is_valid():
+                        desserializer.save()
+                    else:
+                        profile_logger.error('EmpDesSerializer Error')
+                        content = {'error': 'Check the Designation Inpur Field'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if gitserializer.is_valid():
+                        gitserializer.save()
+                    else:
+                        profile_logger.error('GitSerializer Error')
+                        content = {'error': 'Check the GitSerializer Inpur Field'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if linkserializer.is_valid():
+                        linkserializer.save()
+                    else:
+                        profile_logger.error('LinkSerializer Error')
+                        content = {'error': 'Check the LinkSerializer Inpur Field'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    skill = request.data['skill']
+                    skillset = list(skill.values())
+                    skills = ", ".join(skillset)
+                    skillserializer = EmpSkillSerializer(skillid, data={"skill": skills}, context={'request': request})
+                    print(skillserializer)
+                    try:
+                        if skillserializer.is_valid():
+                            skillserializer.save()
+                    except ValueError:
+                        content = {'error': 'Check The Skill Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if projectserializer.is_valid():
+                        projectserializer.save()
+                    else:
+                        profile_logger.error('UpdateProSerializer Error.')
+                        content = {'error': 'Check The Project Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    if langserializer.is_valid():
+                        langserializer.save()
+                        content = {'error': 'Data Updated'}
+                        mail_admins(' Profile Update Notification', 'Profile Updated by %s' % client_id)
+                        return Response(content, status=status.HTTP_200_OK)
+                    else:
+                        profile_logger.error('UpdateLangSerializer Error.')
+                        content = {'error': 'Check The Language Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                except IntegrityError:
+                    profile_logger.error('Employee Integrity Error.')
+                    content = {'error': 'Check The EMP-ID Input Field.'}
+                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            profile_logger.error('No ID in Update View Error.')
+            return status == status.HTTP_400_BAD_REQUEST
+
+    elif request.method == 'PUT':
+        profile_logger.error('Session Error in Update View.')
+        content = {'error': 'Session Ended!'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'GET':
+        profile_logger.error('Session Error in Update View.')
+        content = {'error': 'Session Ended!'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserUpdateView(APIView):
+
+    def usersupdateview(self, request, pk):  # API to retrieve and update details of logged in user.
+        """
+            This function is used get all the data of the users from the database.
+
+            ........................................
+
+            Parameter :
+            request : This is the request method which is used to perform function upon the database for the particular user.
+            pk : This is the primary key which is used to identify the particular user upon which the functions will be appiled.
+            :return:
+                A status code response upon editing or updating the data of the user with the requested primary key.
+            """
+        token = request.META.get('HTTP_AUTHORIZATION')
+        if session_manage(self=token):
+            try:
+                client_id = Employee.objects.get(pk=pk)
+                desid = EmployeeDesignation.objects.get(pk=pk)
+                locid = EmployeeLocation.objects.get(pk=pk)
+                skillid = EmployeeSkill.objects.get(pk=pk)
+                proid = EmployeeProject.objects.get(pk=pk)
+                langid = EmployeeLanguage.objects.get(pk=pk)
+                git_id = Employee.objects.get(pk=pk)
+                link_id = Employee.objects.get(pk=pk)
+            except ValueError:
+                profile_logger.error('Primary Key Error in Update View.')
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            if client_id != 'null':
+                if request.method == 'GET':
+
+                    empserializer = EmpSerializers(client_id, context={'request': request})
+                    desserializer = EmpDesSerializer(desid, context={'request': request})
+                    locserializer = EmpLocSerializer(locid, context={'request': request})
+                    skillserializer = EmpSkillSerializer(skillid, context={'request': request})
+                    projectserializer = EmpProSerializer(proid, context={'request': request})
+                    langserializer = EmpLangSerializer(langid, context={'request': request})
+                    gitserializer = HomeSerializers(git_id, context={'request': request})
+                    linkserializer = HomeSerializers(link_id, context={'request': request})
+
+                    if empserializer:
+                        return Response(
+                            {
+                                "Basic": empserializer.data,
+                                "Designation": desserializer.data,
+                                "Location": locserializer.data,
+                                "Skill": skillserializer.data,
+                                "Project": projectserializer.data,
+                                "Language": langserializer.data,
+                                "Git_id": gitserializer.data,
+                                "Link_id": linkserializer.data,
+                            }, status=status.HTTP_200_OK
+                        )
+                    else:
+                        profile_logger.error('Update View Error.')
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                elif request.method == 'PUT':
+
+                    empserializer = EmpUpdateSerializers(client_id, data=request.data, context={'request': request})
+                    locserializer = EmpLocSerializer(locid, data=request.data, context={'request': request})
+                    projectserializer = EmpProSerializer(proid, data=request.data, context={'request': request})
+                    langserializer = EmpLangSerializer(langid, data=request.data, context={'request': request})
+                    desserializer = EmpDesSerializer(desid, data=request.data, context={'request': request})
+                    gitserializer = HomeSerializers(git_id, data=request.data, context={'request': request})
+                    linkserializer = HomeSerializers(link_id, data=request.data, context={'request': request})
+                    try:
+
+                        if empserializer.is_valid():
+                            empserializer.save()
+                        else:
+                            profile_logger.error('EmpUpdateSerializer Error.')
+                            content = {'error': 'Check The CONTACT Input Field.'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if locserializer.is_valid():
+                            locserializer.save()
+                        else:
+                            profile_logger.error('UpdateLocSerializer Error.')
+                            content = {'error': 'Check The Location Input Field.'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if desserializer.is_valid():
+                            desserializer.save()
+                        else:
+                            profile_logger.error('EmpDesSerializer Error')
+                            content = {'error': 'Check the Designation Inpur Field'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if gitserializer.is_valid():
+                            gitserializer.save()
+                        else:
+                            profile_logger.error('GitSerializer Error')
+                            content = {'error': 'Check the GitSerializer Inpur Field'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if linkserializer.is_valid():
+                            linkserializer.save()
+                        else:
+                            profile_logger.error('LinkSerializer Error')
+                            content = {'error': 'Check the LinkSerializer Inpur Field'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        skill = request.data['skill']
+                        skillset = list(skill.values())
+                        skills = ", ".join(skillset)
+                        skillserializer = EmpSkillSerializer(skillid, data={"skill": skills}, context={'request': request})
+                        print(skillserializer)
+                        try:
+                            if skillserializer.is_valid():
+                                skillserializer.save()
+                        except ValueError:
+                            content = {'error': 'Check The Skill Input Field.'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if projectserializer.is_valid():
+                            projectserializer.save()
+                        else:
+                            profile_logger.error('UpdateProSerializer Error.')
+                            content = {'error': 'Check The Project Input Field.'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                        if langserializer.is_valid():
+                            langserializer.save()
+                            content = {'error': 'Data Updated'}
+                            mail_admins(' Profile Update Notification', 'Profile Updated by %s' % client_id)
+                            return Response(content, status=status.HTTP_200_OK)
+                        else:
+                            profile_logger.error('UpdateLangSerializer Error.')
+                            content = {'error': 'Check The Language Input Field.'}
+                            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+                    except IntegrityError:
+                        profile_logger.error('Employee Integrity Error.')
+                        content = {'error': 'Check The EMP-ID Input Field.'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
             else:
-                profile_logger.error('Update View Error.')
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                profile_logger.error('No ID in Update View Error.')
+                return status == status.HTTP_400_BAD_REQUEST
 
         elif request.method == 'PUT':
+            profile_logger.error('Session Error in Update View.')
+            content = {'error': 'Session Ended!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
-            empserializer = EmpUpdateSerializers(client_id, data=request.data, context={'request': request})
-            locserializer = EmpLocSerializer(locid, data=request.data, context={'request': request})
-            projectserializer = EmpProSerializer(proid, data=request.data, context={'request': request})
-            langserializer = EmpLangSerializer(langid, data=request.data, context={'request': request})
-            desserializer = EmpDesSerializer(desid, data=request.data,  context = {'request': request})
-            gitserializer = HomeSerializers(git_id, data=request.data, context = {'request': request})
-            linkserializer = HomeSerializers(link_id, data=request.data, context = {'request' : request})
-            try:
-
-                if empserializer.is_valid():
-                    empserializer.save()
-                else:
-                    profile_logger.error('EmpUpdateSerializer Error.')
-                    content = {'error': 'Check The CONTACT Input Field.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if locserializer.is_valid():
-                    locserializer.save()
-                else:
-                    profile_logger.error('UpdateLocSerializer Error.')
-                    content = {'error': 'Check The Location Input Field.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if desserializer.is_valid():
-                    desserializer.save()
-                else:
-                    profile_logger.error('EmpDesSerializer Error')
-                    content = {'error': 'Check the Designation Inpur Field'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if gitserializer.is_valid():
-                    gitserializer.save()
-                else:
-                    profile_logger.error('GitSerializer Error')
-                    content = {'error': 'Check the GitSerializer Inpur Field'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if linkserializer.is_valid():
-                    linkserializer.save()
-                else:
-                    profile_logger.error('LinkSerializer Error')
-                    content = {'error': 'Check the LinkSerializer Inpur Field'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                skill = request.data['skill']
-                skillset = list(skill.values())
-                skills = ", ".join(skillset)
-                skillserializer = EmpSkillSerializer(skillid, data={"skill": skills}, context={'request': request})
-                print(skillserializer)
-                try:
-                    if skillserializer.is_valid():
-                        skillserializer.save()
-                except ValueError:
-                    content = {'error': 'Check The Skill Input Field.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if projectserializer.is_valid():
-                    projectserializer.save()
-                else:
-                    profile_logger.error('UpdateProSerializer Error.')
-                    content = {'error': 'Check The Project Input Field.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-                if langserializer.is_valid():
-                    langserializer.save()
-                    content = {'error': 'Data Updated'}
-                    mail_admins(' Profile Update Notification', 'Profile Updated by %s' %client_id)
-                    return Response(content, status=status.HTTP_200_OK)
-                else:
-                    profile_logger.error('UpdateLangSerializer Error.')
-                    content = {'error': 'Check The Language Input Field.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-            except IntegrityError:
-                profile_logger.error('Employee Integrity Error.')
-                content = {'error': 'Check The EMP-ID Input Field.'}
-                return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
-    else:
-        profile_logger.error('No ID in Update View Error.')
-        return status == status.HTTP_400_BAD_REQUEST
-
-    # elif request.method == 'PUT':
-    #     profile_logger.error('Session Error in Update View.')
-    #     content = {'error': 'Session Ended!'}
-    #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    #
-    # elif request.method == 'GET':
-    #     profile_logger.error('Session Error in Update View.')
-    #     content = {'error': 'Session Ended!'}
-    #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'GET':
+            profile_logger.error('Session Error in Update View.')
+            content = {'error': 'Session Ended!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def skillresponse(request):
-    """
+class SkillResponse(APIView):
 
-    :param request:
-    :return:
+    @staticmethod
+    def get(request):
+        """
+        This function is used get all the Language_Skill from the database.
 
-    """
-    if request.method == "GET":
-        query = Skill.objects.all()
-        skills = SkillSerializer(query, many=True).data
+        ........................................
 
-        return Response(skills)
-    else:
-        profile_logger.error('View Skill Error.')
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        Parameter :
 
-@api_view(['GET'])
-def designationresponse(request):
-    """
+        :param request: This is the request method which is used to perform function upon the database.
+        :return: All the language_skill from the database.
 
-    :param request:
-    :return:
-    """
-    if request.method == "GET":
-        query = Designation.objects.all()
-        designations = UpDateDesSerializer(query, many=True).data
+        """
+        try:
+            query = Skill.objects.all()
+            skills = SkillSerializer(query, many=True).data
+            return Response(skills)
+        except ValueError:
+            profile_logger.error('View Skill Error.')
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(designations, status=status.HTTP_200_OK)
 
-    else:
-        profile_logger.error('Update Desigantion Error.')
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+class DesignationResponse(APIView):
+
+    @staticmethod
+    def get(request):
+        try:
+            query = Designation.objects.all()
+            designations = UpDateDesSerializer(query, many=True).data
+            return Response(designations, status=status.HTTP_200_OK)
+
+        except ValueError:
+            profile_logger.error('Update Designation Error.')
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['GET'])
+# def skillresponse(request):
+#     """
+#
+#     :param request:
+#     :return:
+#
+#     """
+#     if request.method == "GET":
+#         query = Skill.objects.all()
+#         skills = SkillSerializer(query, many=True).data
+#
+#         return Response(skills)
+#     else:
+#         profile_logger.error('View Skill Error.')
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['GET'])
+# def designationresponse(request):
+#     """
+#
+#     :param request:
+#     :return:
+#     """
+#     if request.method == "GET":
+#         query = Designation.objects.all()
+#         designations = UpDateDesSerializer(query, many=True).data
+#
+#         return Response(designations, status=status.HTTP_200_OK)
+#
+#     else:
+#         profile_logger.error('Update Designation Error.')
+#         return Response(status=status.HTTP_400_BAD_REQUEST)

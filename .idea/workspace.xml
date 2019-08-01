@@ -2,28 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ea8d3f8-fa70-40ad-958f-9980b8228f13" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Phonebook/Requirment.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.bash_profile" beforeDir="false" afterPath="$PROJECT_DIR$/.bash_profile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/nineleaps.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Login.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Login.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Logs/Phonebook-View.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-View.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/apps.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook_backend/helper_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/helper_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/logging.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook_backend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/phone_verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/phone_verification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook_backend/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Phonebook_backend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/activate_this.py" beforeDir="false" afterPath="$PROJECT_DIR$/bin/activate_this.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/python-config" beforeDir="false" afterPath="$PROJECT_DIR$/bin/python-config" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,13 +28,12 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="9f7d315916a30e597812a082363b258184d7b864" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="67" />
-    <option name="y" value="25" />
-    <option name="width" value="650" />
-    <option name="height" value="743" />
   </component>
   <component name="ProjectId" id="1Ofmqr3uY0TD99NCz9a1XfdV05e" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -82,6 +70,28 @@
       <option name="presentableId" value="Default" />
       <updated>1562570895257</updated>
     </task>
+    <task id="LOCAL-00001" summary="Logout - Class base view">
+      <created>1564641165880</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1564641165880</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Logout - Class base view">
+      <created>1564641566465</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1564641566465</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Logout - Class base view">
+      <created>1564643331390</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1564643331390</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -96,5 +106,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Logout - Class base view" />
+    <MESSAGE value="Two more class base view" />
+    <option name="LAST_COMMIT_MESSAGE" value="Two more class base view" />
   </component>
 </project>

@@ -26,20 +26,58 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # url(r'^swagger$', schema_view),
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # UserLogin_Api
     url(r'^userlogin$', login.UsersLogin.as_view()),
+
+    # UserHomeView_Api
     url(r'^homepage$', profile.HomeView.as_view()),
+
+    # UserDetailView_Api
     url(r'^userview$', profile.UsersView.as_view()),
+
+    # UserSearchedView_Api
     url(r'^searcheduserview$', views.SearchedUsersView.as_view()),
+
+    # UserUpdateView_Api
     url(r'^userupdateview/(?P<pk>[0-9]+)$', profile.usersupdateview),
+
+    # ManagerSearch_Api
     url(r'^usersearch$', views.ManagerSearch.as_view()),
+
+    # Search_Api
     url(r'^search$', views.Search.as_view()),
+
+    # Viewrarchi_Api
     url(r'^userhierarchy$', views.ViewHierarchy.as_view()),
-    url(r'^userlogout$', login.Logout.as_view()),
-    url(r'^sendotp$', phone_verification.sendotp),
-    url(r'^verifyotp$', phone_verification.verify),
-    # url(r'^status$', phone_verification.status),
-    url(r'^addmanager/(?P<pk>[0-9]+)$', profile.addmanager),
+
+    # Hierarchy_Api
     url(r'^newhierarchy$', views.UserHierarchy.as_view()),
-    url(r'^responseskills$', profile.skillresponse),
-    url(r'^responsedesignation$', profile.designationresponse),
+
+    # SendOpt_Api
+    url(r'^sendotp$', phone_verification.sendotp),
+
+    # VerifyOpt_Api
+    url(r'^verifyotp$', phone_verification.verify),
+
+    # url(r'^status$', phone_verification.status),
+
+    # AddManager_Api
+    # url(r'^addmanager/(?P<pk>[0-9]+)$', profile.addmanager),
+
+    # AddManager_Api
+    url(r'^addmanager/(?P<pk>[0-9]+)$', profile.AddManager.as_view()),
+
+    # LaguageSkillResponse_Api
+    url(r'^responseskills$', profile.SkillResponse.as_view()),
+
+    # DesignationResponse_Api
+    url(r'^responsedesignation$', profile.DesignationResponse.as_view()),
+
+    # Logout_Api
+    url(r'^userlogout$', login.Logout.as_view()),
+
+    # UserUpdateView_Api
+    url(r'^userupdatevie/(?P<pk>[0-9]+)$', profile.UserUpdateView.as_view()),
+
 ]

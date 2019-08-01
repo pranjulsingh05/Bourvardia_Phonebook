@@ -119,7 +119,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
         """
 
         basicdetail = Employee.objects.all()
-        client_id = self.request.query_params.get('client_id', None)  # Fetching email through parameter.
+        client_id = getclient(self=self)  # Fetching email through parameter.
         if client_id is not None and client_id != 'null':
             basic = basicdetail.filter(client_id=client_id)
             return basic
@@ -129,7 +129,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
     def designation(self):
 
         designation = EmployeeDesignation.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             des = designation.filter(client_id=client_id)
             return des
@@ -139,7 +139,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
     def location(self):
 
         location = EmployeeLocation.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             loc = location.filter(client_id=client_id)
             return loc
@@ -149,7 +149,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
     def skill(self):
 
         skills = EmployeeSkill.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             skill = skills.filter(client_id=client_id)
             return skill
@@ -159,7 +159,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
     def project(self):
 
         projects = EmployeeProject.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             project = projects.filter(client_id=client_id)
             return project
@@ -169,7 +169,7 @@ class SearchedUsersView(generics.ListAPIView):  # API to show details of logged 
     def language(self):
 
         languages = EmployeeLanguage.objects.all()
-        client_id = self.request.query_params.get('client_id', None)
+        client_id = getclient(self=self)
         if client_id is not None and client_id != 'null':
             language = languages.filter(client_id=client_id)
             return language
@@ -344,33 +344,33 @@ class ViewHierarchy(generics.ListAPIView):  # API to show hierarchy of logged in
             A queryset containing data depending upon the 'HierarchySerializer' serializer class of the searched as well as logged in user.
         """
 
-        # token = self.request.META.get('HTTP_AUTHORIZATION')
-        # if session_manage(self=token):
-        client_id = getclient(self=self)
-        if client_id is not None and client_id != 'null':
-            manager = self.get_manager()
-            intern = self.get_intern()
-            users = self.get_user()
-            serializer1 = SearchSerializer(manager, many=True)
-            serializer2 = SearchSerializer(intern, many=True)
-            serializer3 = SearchSerializer(users, many=True)
-            return Response(
-                {
-                    "Manager": serializer1.data,
-                    "User": serializer3.data,
-                    "Intern": serializer2.data
-                }
-            )
+        token = self.request.META.get('HTTP_AUTHORIZATION')
+        if session_manage(self=token):
+            client_id = getclient(self=self)
+            if client_id is not None and client_id != 'null':
+                manager = self.get_manager()
+                intern = self.get_intern()
+                users = self.get_user()
+                serializer1 = SearchSerializer(manager, many=True)
+                serializer2 = SearchSerializer(intern, many=True)
+                serializer3 = SearchSerializer(users, many=True)
+                return Response(
+                    {
+                        "Manager": serializer1.data,
+                        "User": serializer3.data,
+                        "Intern": serializer2.data
+                    }
+                )
 
-        elif not client_id:
-            view_logger.error('No ID in Hierarchy Error')
-            content = {'error': 'No Data Found.'}
-            return Response(content, status=status.HTTP_204_NO_CONTENT)
+            elif not client_id:
+                view_logger.error('No ID in Hierarchy Error')
+                content = {'error': 'No Data Found.'}
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
 
-        # else:
-        #     view_logger.error('Session Error in View Hierarchy.')
-        #     content = {'error': 'Session Ended.'}
-        #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            view_logger.error('Session Error in View Hierarchy.')
+            content = {'error': 'Session Ended.'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserHierarchy(generics.ListAPIView):

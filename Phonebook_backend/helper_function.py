@@ -20,7 +20,7 @@ def authentication(token_id):
     if idinfo['hd'] != 'nineleaps.com':
         raise ValueError('Wrong hosted Domain.')
 
-    info = {"id":idinfo['sub'], "email" : idinfo['email']}
+    info = {"id": idinfo['sub'], "email": idinfo['email']}
     return info
 
 
