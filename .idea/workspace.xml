@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2ea8d3f8-fa70-40ad-958f-9980b8228f13" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/nineleaps.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Login.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Login.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-View.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-View.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/helper_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/helper_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phonebook_backend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_backend/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="2ea8d3f8-fa70-40ad-958f-9980b8228f13" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +79,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564643331390</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Two More Class base view">
+      <created>1565085950260</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1565085950260</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +105,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Logout - Class base view" />
     <MESSAGE value="Two more class base view" />
-    <option name="LAST_COMMIT_MESSAGE" value="Two more class base view" />
+    <MESSAGE value="Two More Class base view" />
+    <option name="LAST_COMMIT_MESSAGE" value="Two More Class base view" />
   </component>
 </project>
