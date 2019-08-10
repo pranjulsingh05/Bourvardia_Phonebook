@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2ea8d3f8-fa70-40ad-958f-9980b8228f13" name="Default Changelist" comment="" />
+    <list default="true" id="2ea8d3f8-fa70-40ad-958f-9980b8228f13" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Phonebook_App/helper_function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Phonebook_App/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Phonebook_Project/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bash_profile" beforeDir="false" afterPath="$PROJECT_DIR$/.bash_profile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/nineleaps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/nineleaps.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Login.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Login.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-Profile.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/Phonebook-View.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/Phonebook-View.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_Project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/Requirment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_Project/Requirment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_Project/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_Project/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_Project/wsgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/migrations/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/helper_function.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/logging.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/logging.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/phone_verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/phone_verification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/profile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/serializers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phonebook_backend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Phonebook_App/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +59,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Backend_Version2/Phonebook_Backend" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -88,6 +121,16 @@
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

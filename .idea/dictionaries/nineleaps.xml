@@ -1,9 +1,24 @@
 <component name="ProjectDictionaryState">
   <dictionary name="nineleaps">
     <words>
+      <w>addmanager</w>
       <w>hierarchyserializer</w>
+      <w>newhierarchy</w>
+      <w>nineleaps</w>
+      <w>pylint</w>
+      <w>responsedesignation</w>
+      <w>responseskills</w>
+      <w>searcheduserview</w>
+      <w>sendotp</w>
+      <w>skillserializer</w>
+      <w>userhierarchy</w>
+      <w>userlanguage</w>
       <w>userlogout</w>
+      <w>usersearch</w>
       <w>usersupdateview</w>
+      <w>userupdateview</w>
+      <w>userview</w>
+      <w>verifyotp</w>
     </words>
   </dictionary>
 </component>
