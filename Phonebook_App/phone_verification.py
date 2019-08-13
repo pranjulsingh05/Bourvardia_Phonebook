@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from twilio.rest import Client
+from decouple import config
 
 from Phonebook_App.serializers import Employee, ContactSerializers,\
                                           EmpClientIDSerializers
@@ -34,10 +35,10 @@ def sendotp(request):
     print(contact)
 
     # Your Account SID from twilio.com/console
-    account_sid = os.environ.get('TWILIO_ACCOUNT_SID', '')
+    account_sid = config('TWILIO_ACCOUNT_SID', '')
 
     # Your Auth Token from twilio.com/console
-    auth_token = os.environ.get('TWILIO_AUTH_TOKEN', '')
+    auth_token = config('TWILIO_AUTH_TOKEN', '')
 
     client = Client(account_sid, auth_token)
     verification = client.verify \
@@ -71,8 +72,11 @@ def verify(request):
     print(contact)
     print(otp)
     client_query = Employee.objects.get(pk=client_id)
-    account_sid = 'AC11374718c812f729cbfcd5d6171d9ecf'
-    auth_token = '137075228c7bed566210ae44a3e7d086'
+    # Your Account SID from twilio.com/console
+    account_sid = config('TWILIO_ACCOUNT_SID', '')
+    # Your Auth Token from twilio.com/console
+    auth_token = config('TWILIO_AUTH_TOKEN', '')
+
     client = Client(account_sid, auth_token)
     verification_check = client.verify \
         .services('VAc07ac478546894b8f660ccb4448fbe7b') \

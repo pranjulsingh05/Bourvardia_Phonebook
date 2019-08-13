@@ -27,53 +27,53 @@ urlpatterns = [
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
     # UserLogin_Api
-    url(r'^userlogin$', login.UsersLogin.as_view()),
+    url(r'^userlogin$', login.UsersLogin.as_view(), name="User Login"),
 
     # UserHomeView_Api
-    url(r'^homepage$', profile.HomeView.as_view()),
+    url(r'^homepage$', profile.HomeView.as_view(), name="Home page of user"),
 
     # UserDetailView_Api
-    url(r'^userview$', profile.UsersView.as_view()),
+    url(r'^userview$', profile.UsersView.as_view(), name="User Detail View"),
 
     # UserSearchedView_Api
-    url(r'^searcheduserview$', views.SearchedUsersView.as_view()),
+    url(r'^searcheduserview$', views.SearchedUsersView.as_view(), name="Search User Detail"),
 
     # UserUpdateView_Api
     # url(r'^userupdateview/(?P<pk>[0-9]+)$', profile.usersupdateview),
 
     # ManagerSearch_Api
-    url(r'^usersearch$', views.ManagerSearch.as_view()),
+    url(r'^usersearch$', views.ManagerSearch.as_view(), name="User Search-->Manager"),
 
     # Search_Api
-    url(r'^search$', views.Search.as_view()),
+    url(r'^search$', views.Search.as_view(), name="Search"),
 
     # Viewrarchi_Api
-    url(r'^userhierarchy$', views.ViewHierarchy.as_view()),
+    url(r'^userhierarchy$', views.ViewHierarchy.as_view(), name="ViewHierarchy"),
 
     # Hierarchy_Api
-    url(r'^newhierarchy$', views.UserHierarchy.as_view()),
+    url(r'^newhierarchy$', views.UserHierarchy.as_view(), name="UserHierarchy"),
 
     # SendOpt_Api
-    url(r'^sendotp$', phone_verification.sendotp),
+    url(r'^sendotp$', phone_verification.sendotp, name="Send-Opt"),
 
     # VerifyOpt_Api
-    url(r'^verifyotp$', phone_verification.verify),
+    url(r'^verifyotp$', phone_verification.verify, name="Verify-Opt"),
 
     # url(r'^status$', phone_verification.status),
 
     # AddManager_Api
-    url(r'^addmanager/(?P<pk>[0-9]+)$', profile.AddManager.as_view()),
+    url(r'^addmanager/(?P<pk>[0-9]+)$', profile.AddManager.as_view(), name="Add-Manager"),
 
     # LaguageSkillResponse_Api
-    url(r'^responseskills$', profile.SkillResponse.as_view()),
+    url(r'^responseskills$', profile.SkillResponse.as_view(), name="Get all Skill"),
 
     # DesignationResponse_Api
-    url(r'^responsedesignation$', profile.DesignationResponse.as_view()),
+    url(r'^responsedesignation$', profile.DesignationResponse.as_view(), name="Get All Designation"),
 
     # Logout_Api
-    url(r'^userlogout$', login.Logout.as_view()),
+    url(r'^userlogout$', login.Logout.as_view(), name="User-Logout"),
 
     # UserUpdateView_Api
-    url(r'^userupdateview/(?P<pk>[0-9]+)$', profile.UserUpdateView.as_view()),
+    url(r'^userupdateview/(?P<pk>[0-9]+)$', profile.UserUpdateView.as_view(), name="User Update Detail"),
 
 ]
